@@ -2,7 +2,7 @@ import axios from "axios";
 
 let url;
 if (process.env.NODE_ENV === "development") {
-  url = "http://localhost:5000/api";
+  url = "https://bank-server-chenhzt.herokuapp.com/api";
 }
 
 if (process.env.NODE_ENV === "production") {
