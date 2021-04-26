@@ -10,14 +10,7 @@ import AccountInfoPage from './pages/accountInfoDetails';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-    <Switch>
-      <Route exact path='/' component={App} />
-      <Route exact path='/users/:id' component={UserInfoPage} />
-      <Route exact path='/users/:userid/accounts/:accountid' component={AccountInfoPage} />
-      <Route path='*' exact={true} component={NotFoundPage} />
-    </Switch>
-  </BrowserRouter>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );

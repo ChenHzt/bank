@@ -4,6 +4,11 @@ import api from '../../API/api'
 import { Link, useParams } from "react-router-dom";
 import axios from 'axios'
 import Table from '../../components/table'
+import UserService from "../../services/user.service";
+import AccountService from "../../services/account.service";
+
+
+
 function AccountInfoPage(props) {
     const { accountid, userid } = useParams();
 
@@ -20,9 +25,12 @@ function AccountInfoPage(props) {
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true);
-            const responseAccount = await api.get(`/accounts/${accountid}`);
-            const responseUser = await api.get(`/users/${userid}`);
-            const responseTransactions = await api.get(`/accounts/${accountid}/transactions`);
+        
+            const responseAccount = await UserService.getAccountData(accountid);
+            const responseUser = await UserService.getUserData();
+            console.log(responseAccount);
+            const responseTransactions = await UserService.getAccountTransactions(accountid);
+            
             setAccount(responseAccount.data);
             setUser(responseUser.data);
             setTransactions(responseTransactions.data);
@@ -42,7 +50,7 @@ function AccountInfoPage(props) {
             case 'withdraw':
                 submitAction = async () =>{
                     try{
-                        const response = await api.patch(`/accounts/${accountid}/${form}`,{amount});
+                        const response = await AccountService.accountAction(accountid,form,amount);
                         setAmount(0);
                         setForm(null);
                         setError('');
@@ -62,7 +70,7 @@ function AccountInfoPage(props) {
             case 'transfer':
                 submitAction = async () =>{
                     try{
-                        const response = await api.post(`/transfer/${accountid}/${toAccount}`,{amount});
+                        const response = await AccountService.transfer(accountid,toAccount,amount);
                         setAmount(0);
                         setToAccount('');
                         setForm(null);
@@ -90,9 +98,9 @@ function AccountInfoPage(props) {
         return <div className="">loading...</div>
     else return (
         <Container>
-            <div>User ID: {user.user._id}</div>
-            <div>Name: {user.user.name}</div>
-            <div>Passport Id: {user.user.passportId}</div>
+            <div>User ID: {user._id}</div>
+            <div>Name: {user.name}</div>
+            <div>Passport Id: {user.passportId}</div>
             <br/>
             <div>Account Id: {account._id}</div>
             <div>Cash: {account.cash}</div>
